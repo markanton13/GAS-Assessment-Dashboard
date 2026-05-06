@@ -1641,14 +1641,6 @@
             </details>
           `;
         });
-              <strong style="font-size: 16px; color: #202124;">${i + 1}. ${makeLinksClickable(item.question)}</strong>
-              <div style="margin-top: 15px; font-size: 15px; background: white; padding: 15px; border-radius: 8px; border: 1px solid ${borderColor};">
-                <div style="margin-bottom: 8px; color: #202124;"><strong>Your Answer:</strong> ${makeLinksClickable(item.submitted)} <span style="margin-left: 5px;">${icon}</span></div>
-                ${!item.isCorrect ? `<div style="color: #137333; padding-top: 8px; border-top: 1px solid #f1f3f4;"><strong>Correct Answer:</strong> ${makeLinksClickable(item.correct)}</div>` : ''}
-              </div>
-            </div>
-          `;
-        });
         
         html += `<div style="text-align: center; margin-top: 50px;"><p style="color: #5f6368; font-size: 16px;">You may now safely close this tab.</p></div></div>`;
         document.getElementById('taker-content').innerHTML = html;

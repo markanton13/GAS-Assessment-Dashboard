@@ -1602,10 +1602,16 @@
         
         let html = `
           <div style="width: 95%; max-width: 800px; margin: 40px auto;">
-            <div style="text-align: center; padding: 50px 40px; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-top: 8px solid ${isPassed ? '#137333' : '#d93025'}; margin-bottom: 40px;">
+            <div style="text-align: center; padding: 50px 40px; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-top: 8px solid ${isPassed ? '#137333' : '#d93025'}; margin-bottom: 30px;">
               ${headerHtml}
             </div>
-            <h3 style="border-bottom: 2px solid #e8eaed; padding-bottom: 10px; color: #202124; font-size: 22px;">Question Review</h3>
+            
+            <details style="margin-bottom: 20px; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #e8eaed;">
+              <summary style="font-size: 20px; font-weight: bold; color: #202124; cursor: pointer; display: flex; justify-content: space-between; align-items: center; outline: none; list-style: none;">
+                <span style="display: flex; align-items: center; gap: 10px;">📋 Full Question Review</span>
+                <span style="font-size: 13px; background: #e8f0fe; color: #1a73e8; padding: 8px 18px; border-radius: 20px; font-weight: 700; transition: background 0.2s;">Show / Hide</span>
+              </summary>
+              <div style="padding-top: 30px; border-top: 2px solid #f1f3f4; margin-top: 20px;">
         `;
         
         result.details.forEach((item, i) => {
@@ -1642,8 +1648,14 @@
           `;
         });
         
-        html += `<div style="text-align: center; margin-top: 50px;"><p style="color: #5f6368; font-size: 16px;">You may now safely close this tab.</p></div></div>`;
+        html += `</div></details>
+            <div style="text-align: center; margin-top: 40px;"><p style="color: #5f6368; font-size: 16px;">You may now safely close this tab.</p></div>
+          </div>`;
         document.getElementById('taker-content').innerHTML = html;
+        
+        // --- NEW: INSTANTLY SCROLL TO THE TOP OF THE PAGE TO SEE THE SCORE ---
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
       })
       .withFailureHandler(function(error) { showCustomAlert("Error", "There was an error submitting your quiz: " + error.message); })
       .saveResponse(quizId, email, JSON.stringify(userAnswers));

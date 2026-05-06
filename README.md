@@ -78,3 +78,20 @@ Stores the global list of users with system-wide administrative privileges.
 7. Select the gear icon ⚙️ and choose **Web App**.
 8. Set **Execute as** to `Me` and **Who has access** to `Anyone within your organization` (or `Anyone` if testing publicly).
 9. Click **Deploy** to generate your live Assessment Dashboard URL!
+
+---
+
+## ⚠️ Important Deployment & Usage Notes
+
+### Authentication & Access Control
+This application relies on Google's built-in OAuth "bouncer" to authenticate users and capture their email addresses securely. You do not need to build a custom login screen. 
+* When deploying the Web App, you **must** set *Who has access* to `Anyone within your organization` (or `Anyone with a Google Account`). 
+* If an unauthenticated user clicks the assessment link, Google will automatically redirect them to a secure login page before allowing access to the application.
+* **Do not** set access to `Anyone` (Anonymous), or the system will be unable to capture respondent emails for grading.
+
+### Known Issue: The "Multi-Account" Conflict
+Because of how Google Apps Script handles active sessions, users who are logged into multiple Google accounts simultaneously (e.g., a personal `@gmail.com` and a corporate `@company.com` account in the same browser) may encounter an **"Access Denied"** error.
+
+**The Fix:** Instruct your test-takers to complete the assessment using one of the following methods:
+1. Use a dedicated Work/Corporate Chrome Profile.
+2. Open the assessment link in an **Incognito / Private Browsing** window and log in strictly with their required organizational credentials.

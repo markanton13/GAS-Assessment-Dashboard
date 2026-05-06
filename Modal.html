@@ -1,0 +1,233 @@
+<div class="modal-overlay" id="createQuizModal">
+  <div class="modal" style="width: 95%; max-width: 1400px; padding: 40px; border-radius: 16px;"> 
+    
+    <h2 style="margin-top: 0; margin-bottom: 30px; color: #1a73e8; font-size: 26px; border-bottom: 2px solid #e8eaed; padding-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+      <span>✨</span> Create a New Assessment
+    </h2>
+    
+    <div style="margin-bottom: 30px;">
+      <h4 style="margin: 0 0 12px 0; color: #5f6368; font-size: 13px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700;">1. General Information</h4>
+      <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #dadce0;">
+        <label style="font-weight: 600; color: #202124; margin-bottom: 8px; display: block;">Assessment Title <span style="color: #d93025;">*</span></label>
+        <input type="text" id="quizTitle" placeholder="e.g., Q3 Security Compliance Training" style="width: 100%; padding: 14px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px; background: white;">
+      </div>
+    </div>
+
+    <div style="margin-bottom: 30px;">
+      <h4 style="margin: 0 0 12px 0; color: #5f6368; font-size: 13px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700;">2. Testing Rules</h4>
+      <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #dadce0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
+        <div>
+          <label style="font-weight: 600; color: #202124; margin-bottom: 8px; display: block;">Time Limit (Minutes)</label>
+          <input type="number" id="timeLimit" placeholder="Leave blank for no limit" style="width: 100%; padding: 12px; font-size: 15px; border: 1px solid #ccc; border-radius: 6px; background: white;">
+        </div>
+        <div>
+          <label style="font-weight: 600; color: #202124; margin-bottom: 8px; display: block;">Max Attempts</label>
+          <input type="number" id="maxAttempts" placeholder="Leave blank for unlimited" min="1" style="width: 100%; padding: 12px; font-size: 15px; border: 1px solid #ccc; border-radius: 6px; background: white;">
+        </div>
+        <div>
+          <label style="font-weight: 600; color: #202124; margin-bottom: 8px; display: block;">Passing Rate (%)</label>
+          <input type="number" id="passingRate" placeholder="e.g., 80" min="0" max="100" style="width: 100%; padding: 12px; font-size: 15px; border: 1px solid #ccc; border-radius: 6px; background: white;">
+        </div>
+        <div>
+          <label style="font-weight: 600; color: #202124; margin-bottom: 8px; display: block;">Questions to Display</label>
+          <input type="number" id="questionsToShow" placeholder="Leave blank for all" min="1" style="width: 100%; padding: 12px; font-size: 15px; border: 1px solid #ccc; border-radius: 6px; background: white;">
+        </div>
+        <div style="display: flex; align-items: center; padding-top: 25px;">
+          <label style="cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 600; color: #202124;">
+            <input type="checkbox" id="shuffleQuestions" style="width: 20px; height: 20px; cursor: pointer;"> 
+            Shuffle Question Order
+          </label>
+        </div>
+
+      </div>
+    </div>
+
+    <div style="margin-bottom: 30px;">
+      <h4 style="margin: 0 0 12px 0; color: #5f6368; font-size: 13px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700;">3. Availability Window</h4>
+      <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #dadce0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
+        <div>
+          <label style="font-weight: 600; color: #202124; margin-bottom: 8px; display: block;">Available From (Optional)</label>
+          <input type="datetime-local" id="startDate" style="width: 100%; padding: 12px; font-size: 15px; border: 1px solid #ccc; border-radius: 6px; background: white;">
+        </div>
+        <div>
+          <label style="font-weight: 600; color: #202124; margin-bottom: 8px; display: block;">Expires On (Optional)</label>
+          <input type="datetime-local" id="endDate" style="width: 100%; padding: 12px; font-size: 15px; border: 1px solid #ccc; border-radius: 6px; background: white;">
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <h4 style="margin: 0 0 12px 0; color: #5f6368; font-size: 13px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700;">4. Question Content</h4>
+      
+      <select id="creationMethod" onchange="toggleMethod()" style="width: 100%; padding: 14px; font-size: 16px; font-weight: 600; color: #1a73e8; border: 2px solid #1a73e8; border-radius: 8px; background: #e8f0fe; margin-bottom: 20px; cursor: pointer;">
+        <option value="manual">✍️ Write Questions Manually</option>
+        <option value="upload">📁 Upload via CSV File</option>
+      </select>
+
+      <div id="manual-entry-section">
+        <div id="questions-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; align-items: start;">
+          </div>
+        <button class="btn-secondary" onclick="addQuestion()" style="margin-top: 20px; width: 100%; padding: 16px; font-size: 16px; font-weight: bold; border: 2px dashed #1a73e8; border-radius: 8px; background: transparent; color: #1a73e8;">+ Add New Question</button>
+      </div>
+
+      <div id="upload-section" style="display: none; background: #f8f9fa; border: 2px dashed #dadce0; border-radius: 8px; padding: 40px; text-align: center;">
+        <div style="font-size: 40px; margin-bottom: 15px;">📊</div>
+        <label style="font-weight: bold; color: #1a73e8; font-size: 16px; cursor: pointer;">
+          Click here to select a CSV File
+          <input type="file" id="csvUpload" accept=".csv" style="display: block; margin: 15px auto 0 auto; width: 250px;">
+        </label>
+      </div>
+    </div>
+
+    <div style="margin-top: 40px; display: flex; justify-content: flex-end; gap: 15px; border-top: 2px solid #e8eaed; padding-top: 25px;">
+      <button onclick="closeModal()" style="padding: 12px 28px; font-size: 15px; font-weight: 600; color: #5f6368; border: 1px solid #dadce0; background: white; border-radius: 30px; cursor: pointer;">Cancel</button>
+      <button class="btn-primary" onclick="saveQuiz()" style="padding: 12px 35px; font-size: 16px; font-weight: bold; border-radius: 30px;">💾 Save Assessment</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="editSettingsModal" style="z-index: 5000; display: none;">
+  <div class="modal" style="width: 95%; max-width: 1400px; padding: 40px; border-radius: 16px;"> 
+    <h2 style="margin-top: 0; margin-bottom: 30px; color: #1a73e8; font-size: 26px; border-bottom: 2px solid #e8eaed; padding-bottom: 15px;">✏️ Edit Quiz Settings</h2>
+    
+    <input type="hidden" id="editQuizId">
+
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #dadce0; margin-bottom: 20px;">
+      <label style="font-weight: 600; color: #202124; margin-bottom: 8px; display: block;">Assessment Title</label>
+      <input type="text" id="editQuizTitle" style="width: 100%; padding: 12px; font-size: 15px; border: 1px solid #ccc; border-radius: 6px; background: white;">
+    </div>
+
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #dadce0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 20px;">
+      <div>
+        <label style="font-weight: 600; color: #202124; margin-bottom: 8px; display: block;">Time Limit (Minutes)</label>
+        <input type="number" id="editTimeLimit" placeholder="No limit" style="width: 100%; padding: 12px; font-size: 15px; border: 1px solid #ccc; border-radius: 6px; background: white;">
+      </div>
+      <div>
+        <label style="font-weight: 600; color: #202124; margin-bottom: 8px; display: block;">Max Attempts</label>
+        <input type="number" id="editMaxAttempts" placeholder="No limit" min="1" style="width: 100%; padding: 12px; font-size: 15px; border: 1px solid #ccc; border-radius: 6px; background: white;">
+      </div>
+      <div>
+        <label style="font-weight: 600; color: #202124; margin-bottom: 8px; display: block;">Passing Rate (%)</label>
+        <input type="number" id="editPassingRate" placeholder="e.g., 80" min="0" max="100" style="width: 100%; padding: 12px; font-size: 15px; border: 1px solid #ccc; border-radius: 6px; background: white;">
+      </div>
+      
+      <div>
+        <label style="font-weight: 600; color: #202124; margin-bottom: 8px; display: block;">Questions to Display</label>
+        <input type="number" id="editQuestionsToShow" placeholder="Leave blank for all" min="1" style="width: 100%; padding: 12px; font-size: 15px; border: 1px solid #ccc; border-radius: 6px; background: white;">
+      </div>
+
+      <div style="display: flex; align-items: center; padding-top: 25px;">
+        <label style="cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 600; color: #202124;">
+          <input type="checkbox" id="editShuffleQuestions" style="width: 20px; height: 20px;"> Shuffle Questions
+        </label>
+      </div>
+    </div>
+
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #dadce0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
+      <div>
+        <label style="font-weight: 600; color: #202124; margin-bottom: 8px; display: block;">Available From (Optional)</label>
+        <input type="datetime-local" id="editStartDate" style="width: 100%; padding: 12px; font-size: 15px; border: 1px solid #ccc; border-radius: 6px; background: white;">
+      </div>
+      <div>
+        <label style="font-weight: 600; color: #202124; margin-bottom: 8px; display: block;">Expires On (Optional)</label>
+        <input type="datetime-local" id="editEndDate" style="width: 100%; padding: 12px; font-size: 15px; border: 1px solid #ccc; border-radius: 6px; background: white;">
+      </div>
+    </div>
+
+    <div style="margin-top: 30px; display: flex; justify-content: flex-end; gap: 15px; border-top: 2px solid #e8eaed; padding-top: 25px;">
+      <button onclick="document.getElementById('editSettingsModal').style.display='none'" style="padding: 12px 28px; font-size: 15px; font-weight: 600; color: #5f6368; border: 1px solid #dadce0; background: white; border-radius: 30px; cursor: pointer;">Cancel</button>
+      <button class="btn-primary" id="saveEditBtn" onclick="saveEditedSettings()" style="padding: 12px 35px; font-size: 16px; font-weight: bold; border-radius: 30px;">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="genericDialogModal" style="z-index: 9999;">
+  <div class="modal" style="width: 90%; max-width: 450px; text-align: center; padding: 40px; border-radius: 16px;">
+    <h3 id="dialogTitle" style="margin-top: 0; font-size: 22px;">Alert</h3>
+    <p id="dialogMessage" style="margin-bottom: 30px; color: #5f6368; font-size: 16px; line-height: 1.5;">Message goes here.</p>
+    <div id="dialogButtons" style="display: flex; justify-content: center; gap: 15px;">
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="sendInviteModal" style="z-index: 5000; display: none;">
+  <div class="modal" style="width: 95%; max-width: 500px; padding: 35px; border-radius: 16px;">
+    <h3 style="margin-top: 0; color: #1a73e8; font-size: 22px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">📧 Send Assessment Invite</h3>
+    
+    <p style="color: #5f6368; font-size: 14px; margin-bottom: 25px; line-height: 1.5;">Choose a template and send the official link directly to your team. Deadline and passing rates are included automatically.</p>
+    
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #dadce0; margin-bottom: 15px;">
+      <label style="font-weight: 600; color: #202124; margin-bottom: 8px; display: block;">Email Template Type</label>
+      <select id="inviteTemplateType" style="width: 100%; padding: 12px; font-size: 15px; border: 1px solid #ccc; border-radius: 6px; background: white; cursor: pointer;">
+        <option value="monthly">Monthly PKT (Detailed & Motivational)</option>
+        <option value="simple">Simple PKT (Brief & Direct)</option>
+      </select>
+    </div>
+
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #dadce0; margin-bottom: 25px;">
+      <label style="font-weight: 600; color: #202124; margin-bottom: 8px; display: block;">Recipient Email(s) <span style="color: #d93025;">*</span></label>
+      <p style="font-size: 12px; color: #5f6368; margin-top: 0; margin-bottom: 10px;">Separate multiple emails with commas.</p>
+      <input type="text" id="inviteEmailAddress" placeholder="e.g., team-alias@google.com, john@google.com" style="width: 100%; padding: 12px; font-size: 15px; border: 1px solid #ccc; border-radius: 6px; background: white;">
+    </div>
+
+    <div style="display: flex; justify-content: flex-end; gap: 12px; border-top: 2px solid #e8eaed; padding-top: 20px;">
+      <button onclick="document.getElementById('sendInviteModal').style.display='none'" style="padding: 10px 24px; font-weight: 600; color: #5f6368; border: 1px solid #dadce0; background: white; border-radius: 30px; cursor: pointer;">Cancel</button>
+      <button class="btn-primary" onclick="executeSendInvite()" style="padding: 10px 28px; font-weight: bold; border-radius: 30px;">✉️ Send Email</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="adminManagerModal" style="z-index: 6000; display: none;">
+  <div class="modal" style="width: 95%; max-width: 600px; padding: 40px; border-radius: 16px;">
+    <h2 style="margin-top: 0; color: #1a73e8; font-size: 24px; border-bottom: 2px solid #e8eaed; padding-bottom: 15px;">🛡️ Manage Administrators</h2>
+    <p style="color: #5f6368; font-size: 14px; margin-bottom: 25px;">Admins have global access to view, edit, and export every assessment created on this platform.</p>
+
+    <div style="display: flex; gap: 10px; margin-bottom: 30px;">
+      <input type="email" id="newAdminEmail" placeholder="Enter email address to grant access..." style="flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px;">
+      <button class="btn-primary" onclick="executeAddAdmin()" style="padding: 0 20px; border-radius: 6px; font-weight: bold;">+ Add Admin</button>
+    </div>
+
+    <h4 style="margin: 0 0 10px 0; color: #202124; font-size: 15px;">Current Admins</h4>
+    <div id="admin-list-container" style="background: #f8f9fa; border: 1px solid #dadce0; border-radius: 8px; max-height: 250px; overflow-y: auto;">
+      <div style="padding: 15px; text-align: center; color: gray;">Loading admins...</div>
+    </div>
+
+    <div style="display: flex; justify-content: flex-end; margin-top: 30px; border-top: 2px solid #e8eaed; padding-top: 20px;">
+      <button onclick="document.getElementById('adminManagerModal').style.display='none'" style="padding: 10px 24px; font-weight: 600; color: #5f6368; border: 1px solid #dadce0; background: white; border-radius: 30px; cursor: pointer;">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="collabModal" style="z-index: 5000; display: none;">
+  <div class="modal" style="width: 95%; max-width: 500px; padding: 35px; border-radius: 16px;">
+    <h3 style="margin-top: 0; color: #1a73e8; font-size: 22px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">👥 Manage Collaborators</h3>
+    
+    <p style="color: #5f6368; font-size: 14px; margin-bottom: 25px; line-height: 1.5;">Collaborators can view results, edit settings, and modify questions. Separate multiple emails with commas.</p>
+    
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #dadce0; margin-bottom: 25px;">
+      <label style="font-weight: 600; color: #202124; margin-bottom: 8px; display: block;">Collaborator Emails</label>
+      <input type="text" id="collabEmailsInput" placeholder="e.g., john@google.com, jane@google.com" style="width: 100%; padding: 12px; font-size: 15px; border: 1px solid #ccc; border-radius: 6px; background: white;">
+    </div>
+
+    <div style="display: flex; justify-content: flex-end; gap: 12px; border-top: 2px solid #e8eaed; padding-top: 20px;">
+      <button onclick="document.getElementById('collabModal').style.display='none'" style="padding: 10px 24px; font-weight: 600; color: #5f6368; border: 1px solid #dadce0; background: white; border-radius: 30px; cursor: pointer;">Cancel</button>
+      <button class="btn-primary" onclick="executeSaveCollabs()" style="padding: 10px 28px; font-weight: bold; border-radius: 30px;">💾 Save Collaborators</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="editQuestionsModal" style="z-index: 5000; display: none;">
+  <div class="modal" style="width: 95%; max-width: 1400px; padding: 40px; border-radius: 16px;"> 
+    <h2 style="margin-top: 0; margin-bottom: 30px; color: #f29900; font-size: 26px; border-bottom: 2px solid #e8eaed; padding-bottom: 15px;">📝 Edit Questions</h2>
+    
+    <div id="edit-questions-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; align-items: start; max-height: 60vh; overflow-y: auto; padding-right: 10px;">
+      </div>
+    
+    <button class="btn-secondary" onclick="addEditQuestionBlock()" style="margin-top: 20px; width: 100%; padding: 16px; font-size: 16px; font-weight: bold; border: 2px dashed #f29900; border-radius: 8px; background: transparent; color: #f29900;">+ Add New Question</button>
+
+    <div style="margin-top: 30px; display: flex; justify-content: flex-end; gap: 15px; border-top: 2px solid #e8eaed; padding-top: 25px;">
+      <button onclick="document.getElementById('editQuestionsModal').style.display='none'" style="padding: 12px 28px; font-size: 15px; font-weight: 600; color: #5f6368; border: 1px solid #dadce0; background: white; border-radius: 30px; cursor: pointer;">Cancel</button>
+      <button class="btn-primary" id="saveQuestionsBtn" onclick="executeSaveQuestions()" style="padding: 12px 35px; font-size: 16px; font-weight: bold; border-radius: 30px; background: #f29900; border: none;">💾 Save Questions</button>
+    </div>
+  </div>
+</div>

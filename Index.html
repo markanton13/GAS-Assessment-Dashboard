@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <?!= include('Stylesheet'); ?>
+  </head>
+  <body>
+
+    <div id="creator-view" style="display: flex; flex-direction: column; height: 100vh;">
+      
+      <div class="app-bar">
+        <h2 style="margin: 0; font-size: 20px; color: #3c4043; display: flex; align-items: center; gap: 10px;">
+          <span style="color: var(--primary);">📝</span> PKT Assessment Dashboard
+        </h2>
+        <div style="display: flex; gap: 12px;">
+          <button class="btn-secondary" onclick="downloadCSVTemplate()">⬇️ CSV Template</button>
+          <button class="btn-secondary" onclick="document.getElementById('csvUpload').click(); document.getElementById('creationMethod').value = 'upload'; toggleMethod(); openModal();">📁 Import CSV</button>
+          <button class="btn-primary" onclick="openModal()">+ Create New Quiz</button>
+        </div>
+      </div>
+
+      <div class="workspace">
+        
+        <div id="sidebar">
+          <div style="padding: 24px 24px 8px 24px;">
+            <h4 style="color: gray;"><span id="sidebar-header-title">My Quizzes</span></h4>
+          </div>
+          <div id="sidebar-quiz-list" style="overflow-y: auto; flex: 1;">
+            </div>
+        </div>
+
+        <div id="dashboard-view">
+          <div style="height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; color: var(--text-muted); text-align: center;">
+            <span style="font-size: 48px; margin-bottom: 16px;">👈</span>
+            <h2 style="margin: 0 0 8px 0; color: var(--text-main);">Select a quiz</h2>
+            <p style="margin: 0;">Choose an assessment from the sidebar to view its analytics, or create a new one.</p>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+
+    <div id="taker-view" style="display: none; background: var(--background); min-height: 100vh; padding: 40px 20px;">
+      <div id="taker-content">
+        </div>
+    </div>
+
+    <?!= include('Modal'); ?>
+    <?!= include('JavaScript'); ?>
+
+    <script>
+      // Automatically route users based on the URL
+      const urlQuizId = "<?= quizId ?>"; 
+      
+      window.onload = function() {
+        if (urlQuizId && urlQuizId !== "" && urlQuizId !== "null") {
+          document.getElementById('creator-view').style.display = 'none';
+          document.getElementById('taker-view').style.display = 'block';
+          loadQuizForTaker(urlQuizId);
+        } else {
+          document.getElementById('creator-view').style.display = 'flex';
+          document.getElementById('taker-view').style.display = 'none';
+          loadSidebarQuizzes();
+        }
+      };
+    </script>
+  </body>
+</html>

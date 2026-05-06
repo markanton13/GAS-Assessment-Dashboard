@@ -1613,9 +1613,34 @@
           const borderColor = item.isCorrect ? '#ceead6' : '#fad2cf';
           const icon = item.isCorrect ? '✅' : '❌';
           
-          // --- APPLIED auto-linkifier to the review screen ---
+          // --- COMPRESSED ACCORDION REVIEW UI (OPEN BY DEFAULT) ---
           html += `
-            <div style="background: ${bgColor}; border: 1px solid ${borderColor}; padding: 25px 30px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.03);">
+            <details open style="background: ${bgColor}; border: 1px solid ${borderColor}; border-radius: 8px; margin-bottom: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+              <summary style="padding: 16px 20px; font-size: 15px; font-weight: 600; color: #202124; cursor: pointer; outline: none; display: flex; justify-content: space-between; align-items: flex-start; gap: 15px;">
+                <div style="flex: 1; line-height: 1.4; margin-top: 2px;">
+                  ${i + 1}. ${makeLinksClickable(item.question)}
+                </div>
+                <div style="white-space: nowrap; font-size: 16px; display: flex; align-items: center; gap: 8px;">
+                  ${icon}
+                  <span style="color: #5f6368; font-size: 10px;">▼</span>
+                </div>
+              </summary>
+              
+              <div style="padding: 18px 20px; background: white; border-top: 1px solid ${borderColor}; font-size: 14px; line-height: 1.5;">
+                <div style="margin-bottom: ${!item.isCorrect ? '12px' : '0'}; color: #202124;">
+                  <strong style="color: #5f6368;">Your Answer:</strong><br> 
+                  ${makeLinksClickable(item.submitted)}
+                </div>
+                
+                ${!item.isCorrect ? `
+                <div style="color: #137333; padding-top: 12px; border-top: 1px dashed #ceead6;">
+                  <strong style="color: #137333;">Correct Answer:</strong><br> 
+                  ${makeLinksClickable(item.correct)}
+                </div>` : ''}
+              </div>
+            </details>
+          `;
+        });
               <strong style="font-size: 16px; color: #202124;">${i + 1}. ${makeLinksClickable(item.question)}</strong>
               <div style="margin-top: 15px; font-size: 15px; background: white; padding: 15px; border-radius: 8px; border: 1px solid ${borderColor};">
                 <div style="margin-bottom: 8px; color: #202124;"><strong>Your Answer:</strong> ${makeLinksClickable(item.submitted)} <span style="margin-left: 5px;">${icon}</span></div>
